@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sakura Console — 樱花服务器管理器</title>
+        <meta name="keywords" content="&lt;block name=&#39;keywords&#39;&gt;">
+        <meta name="description" content="&lt;block name=&#39;description&#39;&gt;">
+        <link rel="shortcut icon" href="assets/favicon.ico">
+        <link href="assets/bootstrap.min14ed.css" rel="stylesheet">
+        <link href="assets/font-awesome.min93e3.css" rel="stylesheet">
+        <link href="assets/animate.min.css" rel="stylesheet">
+        <link href="assets/style.min862f.css" rel="stylesheet">
+        <script src="assets/jquery.min.js"></script>
+        <script src="assets/bootstrap.min.js"></script>
+        <script src="assets/jquery.metisMenu.js"></script>
+        <script src="assets/jquery.slimscroll.min.js"></script>
+        <script src="assets/layer.min.js"></script>
+        <link rel="stylesheet" href="assets/layer.css" id="layui_layer_skinlayercss" style="">
+        <script src="assets/hplus.min.js"></script>
+        <script src="assets/contabs.min.js"></script>
+		<script src="assets/echarts.common.min.js"></script>
+		<script src="assets/echartsOne.js"></script>
+        <link rel="stylesheet" href="assets/layer.ext.css" id="layui_layer_skinlayerextcss" style="">
+        <link rel="stylesheet" href="assets/style.css" id="layui_layer_skinmoonstylecss" style="">
+		<style type="text/css">
+			body {
+				/*text-shadow: 0px 0px 5px rgba(0,0,0,0.3);*/
+			}
+			.addfrp {
+				width: 100%;
+				display: inline-table;
+			}
+			.addfrp input {
+				border: 0px;
+				width: 100%;
+				border-bottom: 1px solid #ddd;
+				padding-left: 3px;
+				outline: none;
+				height: 32px;
+			}
+			.select {
+				border: 0px;
+				width: 256px;
+				border-bottom: 1px solid #ddd;
+				padding-left: 3px;
+				outline: none;
+				height: 32px;
+			}
+			.addfrp tr {
+				height: 45px;
+				vertical-align: top;
+			}
+			.addfrp input:focus {
+				border-bottom: 1px solid #FF8700;
+			}
+			.addfrp .reportbug {
+				border: 0px;
+				width: 100%;
+				border-bottom: 1px solid #ddd;
+				padding-left: 3px;
+				outline: none;
+				height: 280px;
+			}
+			.submit {
+				border: 0px;
+				width: 128px;
+				height: 28px;
+				background: rgba(255, 177, 0, 0.82);
+				color: #FFF;
+				cursor: pointer;
+				border-radius: 4px;
+				float: right;
+				margin-top: 16px;
+				outline: none;
+			}
+			.submit:hover {
+				background: rgba(255, 177, 0, 1);
+			}
+			.pie-main {
+				width: 100%;
+				height: 320px;
+				-webkit-tap-highlight-color: transparent;
+				user-select: none;
+				position: relative;
+				background: transparent;
+			}
+			.pie-main-div {
+				position: relative;
+				overflow: hidden;
+				width: 100%;
+				height: 320px;
+				padding: 0px;
+				margin: 0px;
+				border-width: 0px;
+				cursor: default;
+			}
+			.pie-main-div-canvas {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				width: 100%;
+				height: 320px;
+				user-select: none;
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				padding: 0px;
+				margin: 0px;
+				border-width: 0px;
+			}
+			.command {
+				height: 34px;
+				width: 100%;
+				border: 1px solid #cccccc;
+				border-radius: 4px;
+				padding-left: 4px;
+				outline: none;
+				margin-bottom: 16px;
+				box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+				transition: border linear .2s, box-shadow linear .2s;
+			}
+			.command:focus {
+				box-shadow: 0px 0px 8px rgba(0,173,255,0.8);
+			}
+			.messagebg {
+				width: 100%;
+				height: 100%;
+				position: fixed;
+				top: 0px;
+				left: 0px;
+				z-index: 99999999999;
+				background: rgba(0,0,0,0.75);
+			}
+			.messagebg .messagebox {
+				width: 512px;
+				height: 128px;
+				margin: auto;
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				background: #FFF;
+				box-shadow: 0px 0px 20px #000;
+				border-radius: 8px;
+			}
+			.messagebg .messagebox table {
+				width: 90%;
+				margin: auto;
+			}
+			.messagebg .messagebox h2 {
+				font-size: 24px;
+				margin-top: 16px;
+				margin-bottom: 8px;
+				font-weight: normal;
+				color: #333;
+			}
+			conl {
+				word-break: break-word;
+				width: 100%;
+				display: inline-block;
+				margin-bottom: -17px;
+				word-wrap: break-word;
+				text-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+			}
+			conl:hover {
+				background: rgba(0,0,0,0.3);
+				color: #FFF;
+			}
+			conl:last-child {
+				margin-bottom: 5px;
+			}
+			#systeminfo {
+				display: none;
+			}
+		</style></head>
+    <body class="fixed-sidebar full-height-layout gray-bg">
+		<div class="messagebg" id="messagebg" style="display: none;">
+			<div class="messagebox">
+				<table>
+					<tr>
+						<td>
+							<h2>提示信息</h2>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div id="msgcontent">
+								
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var isopenmsgbox = false;
+			function showmsg(text) {
+				$("#messagebg").fadeIn(300);
+				$("#msgcontent").html(text);
+				isopenmsgbox = true;
+			}
+			$("#messagebg").click(function (){
+				if(isopenmsgbox) {
+					$("#messagebg").fadeOut(300);
+					isopenmsgbox = false;
+				}
+			});
+			function progressshow(text) {
+				$("#messagebg").fadeIn(300);
+				$("#msgcontent").text(text);
+			}
+			function progressunshow() {
+				$("#messagebg").fadeOut(300);
+			}
+		</script>
+		<div class="menubar">
+			<div class="logo">
+				<h2>Sakura Console</h2>
+			</div>
+		</div>
+        <div class="wrapper wrapper-content" style="margin-top: 48px;">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Sakura Console 服务器控制台</h5></div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">
+                                <span class="text-danger" id="daemon">未连接</span>
+								<br>
+								<small>欢迎使用 Sakura Console 服务器控制台，本控制台由 SakuraYAMI 开发。</small>
+								<pre style="display: block;height: 512px;margin-top: 16px;overflow-y: scroll;overflow-x: auto;box-shadow: inset 0px 0px 8px rgba(0,0,0,0.3);border: 1px solid #cccccc;" id="console"></pre>
+							</h1>
+							<div class="col-lg-10">
+								<div class="ibox float-e-margins">
+									<center>
+										<input type="text" id="cmd" class="command">
+									</center>
+									<p><input type="checkbox" checked="checked" id="autoflush"> 保持输出窗口持续刷新</input></p>
+								</div>
+							</div>
+							<div class="col-lg-2">
+								<div class="ibox float-e-margins">
+									<center>
+										<button class="btn btn-primary" onclick="send()">执行命令</button>
+									</center>
+								</div>
+							</div>
+							<br><br><br><br>
+						</div>
+                    </div>
+					<div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>快捷命令</h5></div>
+                        <div class="ibox-content">
+							<p>系统常用命令 ( 启动服务器后不可用 )</p>
+							<button class="btn btn-primary" onclick="exec('dir')">列出目录 (Windows)</button>
+							<button class="btn btn-info" onclick="exec('ls -la')">列出目录 (Linux)</button>
+							<button class="btn btn-success" onclick="exec('java -version')">查询 Java 版本</button>
+							<button class="btn btn-danger" onclick="exec('systeminfo')">系统信息 (Windows)</button>
+							<button class="btn btn-info" onclick="exec('free -g')">内存占用 (Linux)</button>
+							<button class="btn btn-success" onclick="exec('cat /proc/cpuinfo')">CPU信息 (Linux)</button>
+							<button class="btn btn-primary" onclick="exec('df -h')">硬盘信息 (Linux)</button>
+							<button class="btn btn-warning" onclick="exec('java -Dfile.encoding=UTF-8 -Xmx1024M -Xms1024M -jar Spigot.jar')">启动Spigot (Spigot.jar)</button>
+							<button class="btn btn-danger" onclick="exec('java -Dfile.encoding=UTF-8 -Xmx1024M -Xms1024M -jar PaperSpigot.jar')">启动PaperSpigot (PaperSpigot.jar)</button>
+							<button class="btn btn-primary" onclick="exec('taskkill /f /im java.exe')">结束Java进程 (Windows)</button>
+							<button class="btn btn-info" onclick="exec('echo eula=true>eula.txt')">同意 EULA 协议</button>
+							<hr>
+							<p>Minecraft 命令 ( 关闭服务器后不可用 )</p>
+							<button class="btn btn-primary" onclick="exec('gc')">服务器状态信息</button>
+							<button class="btn btn-warning" onclick="exec('list')">在线玩家列表</button>
+							<button class="btn btn-danger" onclick="exec('stop')">关闭服务器</button>
+							<button class="btn btn-success" onclick="exec('reload')">重载服务器</button>
+							<button class="btn btn-info" onclick="exec('plugins')">获取插件列表</button>
+							<button class="btn btn-warning" onclick="exec('tps')">查询服务器TPS</button>
+							<button class="btn btn-danger" onclick="txtadd('broadcast')">发送公告</button>
+							<button class="btn btn-primary" onclick="txtadd('kick')">踢出指定玩家</button>
+							<button class="btn btn-danger" onclick="txtadd('kill')">杀死指定玩家</button>
+							<button class="btn btn-warning" onclick="txtadd('ban')">封禁指定玩家</button>
+							<button class="btn btn-success" onclick="txtadd('banip')">封禁指定IP地址</button>
+							<button class="btn btn-info" onclick="txtadd('unban')">解封指定玩家</button>
+							<button class="btn btn-warning" onclick="txtadd('unbanip')">解封指定IP地址</button>
+							<button class="btn btn-success" onclick="txtadd('say')">发送消息</button>
+							<button class="btn btn-primary" onclick="exec('ess reload')">重载 Ess</button>
+						</div>
+					</div>
+                </div>
+				<div class="col-lg-4">
+					<div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>服务器设置</h5></div>
+                        <div class="ibox-content">
+							<p>如果您访问的是本站 https 页面，您的服务器也需要具备 https 支持（浏览器安全限制）。</p>
+							<p>所有数据使用 Cookie 储存在本地，如需清除配置信息请清空 Cookie 即可。</p>
+							<p>Js轮询延迟建议设置在 1000~2000 之间，设置越小控制台更新越快，但是 CPU 占用更高。</p>
+							<p>断开连接后再次连接可能会卡死，请尝试刷新页面即可。请不要连续点击启动或关闭按钮。</p>
+							<br>
+							<b>配置信息</b>
+							<hr>
+							<div class="row">
+								<div class="col-lg-3">
+									<center>
+										<span style="line-height: 36px;">服务器地址</span>
+									</center>
+								</div>
+								<div class="col-lg-9">
+									<center>
+										<input type="text" id="hostname" class="command">
+									</center>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-lg-3">
+									<center>
+										<span style="line-height: 36px;">服务器密码</span>
+									</center>
+								</div>
+								<div class="col-lg-9">
+									<center>
+										<input type="password" id="password" class="command">
+									</center>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-lg-3">
+									<center>
+										<span style="line-height: 36px;">连接协议名</span>
+									</center>
+								</div>
+								<div class="col-lg-9">
+									<center>
+										<select class="command" id="conntype">
+											<option value="http" id="http">HTTP</option>
+											<option value="https" id="https">HTTPS</option>
+										</select>
+									</center>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-lg-3">
+									<center>
+										<span style="line-height: 36px;">Js轮询延迟</span>
+									</center>
+								</div>
+								<div class="col-lg-9">
+									<center>
+										<input type="text" id="timeout" class="command" value="1000">
+									</center>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-lg-8"></div>
+								<div class="col-lg-4">
+									<center>
+										<button class="btn btn-success" id="connect">启动连接</button>
+										<button class="btn btn-danger" onclick="disconnect()">断开连接</button>
+									</center>
+								</div>
+							</div>
+							<span id="info"></span>
+						</div>
+					</div>
+					<div class="ibox float-e-margins" id="systeminfo">
+                        <div class="ibox-title">
+                            <h5>系统负载</h5></div>
+                        <div class="ibox-content">
+							<p>此处会显示服务器系统负载信息，当 Sakura Console 后端运行在 Windows 系统下时，内存负载为 JVM 最大内存占用比例；当运行在 Linux 下时，此处显示的是真实的物理内存占用率。</p>
+							<p>由于需要调用系统进程，请勿频繁点击刷新信息，否则会造成服务器系统卡顿。</p>
+							<p><b>状态：</b><span id="loadstatus">加载中...</span></p>
+							<p><button onclick="systeminfo()" class="btn btn-primary">立即刷新信息</button></p>
+							<p>CPU负载 <code id="cpuusage">Loading...</code>&nbsp;&nbsp;<span id="cpuval"></span></p>
+							<div class="view">
+								<div id="cpubar" class="progress progress-striped active progress-success">
+									<div class="bar" id="cpuusagebar" style="width: 0%;"></div>
+								</div>
+							</div>
+							<p>内存负载 <code id="memusage">Loading...</code></p>
+							<div class="view">
+								<div id="membar" class="progress progress-striped active progress-success">
+									<div class="bar" id="memusagebar" style="width: 0%;"></div>
+								</div>
+							</div>
+							<p>硬盘负载 <code id="diskusage">Loading...</code></p>
+							<div class="view">
+								<div id="diskbar" class="progress progress-striped active progress-success">
+									<div class="bar" id="diskusagebar" style="width: 0%;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>更新说明</h5></div>
+                        <div class="ibox-content">
+							<p>1.0 基础功能支持</p>
+							<p>1.1 自定义延迟修改支持</p>
+							<p>1.2 修复乱码错误，加入彩色支持 &amp; 控制台汉化</p>
+						</div>
+					</div>
+					<div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>关注我</h5></div>
+                        <div class="ibox-content">
+							<button class="btn btn-primary" onclick="location='https://github.com/KasuganoSoras'"><i class="fa fa-github"></i> Github</button>
+							<button class="btn btn-info" onclick="location='https://twitter.com/KasuganoSoras'"><i class="fa fa-twitter"></i> Twitter</button>
+							<button class="btn btn-success" onclick="location='https://facebook.com/KasuganoSoras'"><i class="fa fa-facebook"></i> Facebook</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var password = "";
+			var hostname = "";
+			var conntype = "http";
+			var isblur = false;
+			var ishide = true;
+			var isdisconnect = false;
+			var msgstorage = "";
+			var latestmsg = "";
+			var newestmsg = "";
+			var loginuser = "kasuganosoras";
+			var timeout = 0;
+			var jstime = 1000;
+			var height = document.getElementById('console').scrollHeight;
+			var status = "0";
+			function send() {
+				if(password == "") {
+					return;
+				}
+				if(hostname == "") {
+					return;
+				}
+				var msgtext = encodeURIComponent($("#cmd").val());
+				htmlobjs = $.ajax({url:conntype + "://" + hostname + "/?s=send&pass=" + password + "&msg=" + msgtext, async:true, timeout:5000, success: function() {
+					$("#cmd").val("");
+					document.getElementById('console').scrollTop = document.getElementById('console').scrollHeight;
+					if(htmlobjs.responseText.indexOf("Successful") == -1) {
+						showmsg(htmlobjs.responseText);
+					}
+					latestmsg = decodeURIComponent(msgtext);
+				}, error:function() {
+					var errortxt = htmlobjs.responseText;
+					if(errortxt == "") {
+						showmsg("发送失败，无法连接至服务器");
+					} else {
+						showmsg("发送失败，" + errortxt);
+					}
+				}});
+			};
+			function txtadd(cmd) {
+				$("#cmd").val(cmd + " ");
+			}
+			function disconnect() {
+				hostname = "";
+				password = "";
+				$("#console").html("");
+				$("#daemon").html("未连接");
+				$("#daemon").attr("class", "text-danger");
+				status = "0";
+				motd();
+				$("#systeminfo").fadeOut();
+			}
+			function exec(cmd) {
+				if(password == "") {
+					return;
+				}
+				if(hostname == "") {
+					return;
+				}
+				var msgtext = encodeURIComponent(cmd);
+				htmlobjs = $.ajax({url:conntype + "://" + hostname + "/?s=send&pass=" + password + "&msg=" + msgtext, async:true, timeout:5000, success: function() {
+					document.getElementById('console').scrollTop = 999999;//document.getElementById('console').scrollHeight;
+					if(htmlobjs.responseText.indexOf("Successful") == -1) {
+						showmsg(htmlobjs.responseText);
+					}
+				}, error:function() {
+					var errortxt = htmlobjs.responseText;
+					if(errortxt == "") {
+						showmsg("发送失败，无法连接至服务器");
+					} else {
+						showmsg("发送失败，" + errortxt);
+					}
+				}});
+			};
+			function systeminfo() {
+				if(password == "") {
+					return;
+				}
+				if(hostname == "") {
+					return;
+				}
+				$("#loadstatus").html("加载中...");
+				htmlobjs = $.ajax({url:conntype + "://" + hostname + "/?s=systeminfo&pass=" + password, async:true, timeout:30000, success: function() {
+					var data = htmlobjs.responseText;
+					if(data.indexOf("/") > -1) {
+						var tag = data.split("/");
+						if(tag.length > 3) {
+							$("#cpuusage").html(tag[0] + "%");
+							$("#cpuusagebar").attr("style", "width: " + tag[0] + "%");
+							$("#memusage").html(tag[1] + "%");
+							$("#memusagebar").attr("style", "width: " + tag[1] + "%");
+							$("#diskusage").html(tag[2] + "%");
+							$("#diskusagebar").attr("style", "width: " + tag[2] + "%");
+							$("#cpuval").html(tag[3] + " Cores CPU");
+							//CPU
+							if(parseInt(tag[0]) < 50) {
+								$("#cpubar").attr("class", "progress progress-striped active progress-success");
+							}
+							if(parseInt(tag[0]) > 50) {
+								$("#cpubar").attr("class", "progress progress-striped active");
+							}
+							if(parseInt(tag[0]) > 65) {
+								$("#cpubar").attr("class", "progress progress-striped active progress-warning");
+							}
+							if(parseInt(tag[0]) > 80) {
+								$("#cpubar").attr("class", "progress progress-striped active progress-danger");
+							}
+							//内存
+							if(parseInt(tag[1]) < 50) {
+								$("#membar").attr("class", "progress progress-striped active progress-success");
+							}
+							if(parseInt(tag[1]) > 50) {
+								$("#membar").attr("class", "progress progress-striped active");
+							}
+							if(parseInt(tag[1]) > 65) {
+								$("#membar").attr("class", "progress progress-striped active progress-warning");
+							}
+							if(parseInt(tag[1]) > 80) {
+								$("#membar").attr("class", "progress progress-striped active progress-danger");
+							}
+							//硬盘
+							if(parseInt(tag[2]) < 50) {
+								$("#diskbar").attr("class", "progress progress-striped active progress-success");
+							}
+							if(parseInt(tag[2]) > 50) {
+								$("#diskbar").attr("class", "progress progress-striped active");
+							}
+							if(parseInt(tag[2]) > 65) {
+								$("#diskbar").attr("class", "progress progress-striped active progress-warning");
+							}
+							if(parseInt(tag[2]) > 80) {
+								$("#diskbar").attr("class", "progress progress-striped active progress-danger");
+							}
+							$("#loadstatus").html("已就绪");
+						} else {
+							showmsg("获取系统负载信息失败！");
+							console.log(tag.length);
+						}
+					} else {
+						showmsg("获取系统负载信息失败！");
+						console.log(data.indexOf("/"));
+					}
+				}, error:function() {
+					showmsg("获取系统负载信息失败！");
+				}});
+			};
+			window.onkeydown = function(event){
+				switch(event.keyCode) {
+					case 13:
+						send();
+						return false;
+						break;
+					case 38:
+						if(latestmsg != "" & latestmsg != $("#cmd").val() & event.ctrlKey) {
+							newestmsg = $("#cmd").val();
+							$("#cmd").val(latestmsg);
+						}
+						return false;
+						break;
+					case 40:
+						if(newestmsg != "" & newestmsg != $("#cmd").val() & event.ctrlKey) {
+							latestmsg = $("#cmd").val();
+							$("#cmd").val(newestmsg);
+						}
+						break;
+				}
+			};
+			function ajaxload() {
+				if(password == "") {
+					return;
+				}
+				if(hostname == "") {
+					return;
+				}
+				if(isdisconnect) {
+					return;
+				}
+				htmlobj = $.ajax({url:conntype + "://" + hostname + "/?s=msg&pass=" + password, async:true, timeout:5000, success: function() {
+					try {
+						var consoleline = htmlobj.responseText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");//.replace(/\n/g, "<br>");
+						consoleline = consoleline.replace(/INFO]/g, "<span style='color: #00BB00'>信息</span>]");
+						consoleline = consoleline.replace(/WARN]/g, "<span style='color: #FF8700'>警告</span>]");
+						consoleline = consoleline.replace(/ERROR]/g, "<span style='color: #FF0000'>错误</span>]");
+						consoleline = consoleline.replace(/Multiverse\-Core]/g, "MV 多世界]");
+						consoleline = consoleline.replace(/TreasureChest]/g, "奖励箱]");
+						consoleline = consoleline.replace(/Stargate]/g, "星门传送]");
+						consoleline = consoleline.replace(/Residence]/g, "领地插件]");
+						consoleline = consoleline.replace(/Citizens]/g, "NPC插件]");
+						consoleline = consoleline.replace(/HolographicDisplays]/g, "全息字体]");
+						consoleline = consoleline.replace(/KillerMoney]/g, "杀怪得钱]");
+						consoleline = consoleline.replace(/CommandNPC]/g, "NPC命令]");
+						consoleline = consoleline.replace(/Essentials]/g, "基础插件]");
+						consoleline = consoleline.replace(/TitleManager]/g, "标题插件]");
+						consoleline = consoleline.replace(/ProtocolSupport]/g, "跨版本支持]");
+						consoleline = consoleline.replace(/\[Server\]/g, "<span style='color: #FF56AD'>[服务器]</span>");
+						consoleline = consoleline.replace(/CONSOLE issued server command:/g, "<span style='color: #FF56AD'>服务器执行了命令：</span>");
+						consoleline = consoleline.replace(/((http|https):\/\/([\w\-]+\.)+[\w\-]+(\/[\w\u4e00-\u9fa5\-\.\/?\@\%\!\&=\+\~\:\#\;\,]*)?)/ig, "<a href='$1' target='_blank'>$1</a>");
+						consoleline = consoleline.replace("Done (", "<span style='color: #0063BB'>启动完成！耗时 </span>");//、、Done (14.234
+						consoleline = consoleline.replace("s)! For help, type \"help\" or \"?\"", "<span style='color: #0063BB'> 秒，需要更多帮助，请输入“help”或”?“</span>");//、、Done (14.234
+					} catch (error) {
+						// no
+					}
+					if(msgstorage != consoleline) {
+						var tempheight = document.getElementById('console').scrollHeight - height;
+						var temptag = consoleline.split("\n");
+						var update = false;
+						if(document.getElementById('console').scrollTop == tempheight) {
+							update = true;
+						}
+						$("#console").html('');
+						for(var i = 0;i < temptag.length;i++) {
+							if(temptag[i] != "") {
+								Logger.log("<conl>" + temptag[i] + "</conl>");
+							}
+						}
+						//$("#console").html(consoleline);
+						/*if(update) {
+							console.log(document.getElementById('console').scrollTop + "/" + document.getElementById('console').scrollHeight + "/" + tempheight);
+							document.getElementById('console').scrollTop = 999999;//document.getElementById('console').scrollHeight;
+						}*/
+						msgstorage = consoleline;
+					}
+					status = 1;
+					setTimeout("ajaxload()", jstime);
+					if(autoflush.checked) {
+						document.getElementById('console').scrollTop = 999999;
+					}
+				}, error: function() {
+					$("#daemon").html("未连接");
+					$("#daemon").attr("class", "text-danger");
+					showmsg("与服务器的连接已断开。");
+					hostname = "";
+					password = "";
+					conntype = "http";
+					status = "0";
+					notification("与服务器的连接已断开。");
+					motd();
+					Logger.log("<b>Error: </b>Remote host closed connection");
+					$("#systeminfo").fadeOut();
+				}});
+			};
+			function notification(user, text, image) {
+				if (window.Notification) {
+					if (Notification.permission === 'granted'){
+						var notification = new Notification(user, {body:text, icon:image});
+					} else {
+						Notification.requestPermission(function(result) {
+							if (result === 'denied' || result === 'default') {
+								//Not do anything
+							} else {
+								var notification = new Notification(user, {body:text, icon:image});
+							}
+						});
+					}
+				} else {
+					showmsg("您的浏览器太旧，请更新");
+				}
+			};
+			var Logger = {
+				log: function(str) {
+					$("#console").html($("#console").html() + str + "\n");
+				}
+			}
+			function timeoutStart() {
+				if(isblur) {
+					if(timeout < 120) {
+						timeout++;
+						setTimeout("timeoutStart()", 1000);
+					} else {
+						isdisconnect = true;
+					}
+				}
+			};
+			window.onblur = function() {
+				isblur = true;
+				timeoutStart();
+			};
+			window.onfocus = function() {
+				if(isblur) {
+					isblur = false;
+					isdisconnect = false;
+					timeout = 0;
+					ajaxload();
+					status = "0";
+				}
+			}
+			window.onload = motd();
+			function motd() {
+				Logger.log(" ____        _                    __  __  ____    ____                      _      ");
+				Logger.log("/ ___|  __ _| | ___   _ _ __ __ _|  \\/  |/ ___|  / ___|___  _ __  ___  ___ | | ___ ");
+				Logger.log("\\___ \\ / _` | |/ / | | | '__/ _` | |\\/| | |     | |   / _ \\| '_ \\/ __|/ _ \\| |/ _ \\");
+				Logger.log(" ___) | (_| |   <| |_| | | | (_| | |  | | |___  | |__| (_) | | | \\__ \\ (_) | |  __/");
+				Logger.log("|____/ \\__,_|_|\\_\\\\__,_|_|  \\__,_|_|  |_|\\____|  \\____\\___/|_| |_|___/\\___/|_|\\___|");
+				Logger.log("");
+				Logger.log("欢迎使用 Sakura Console 服务器管理器，版本 v1.2");
+				Logger.log("");
+				Logger.log("官网：<a href='https://www.sakuramc.org/'>https://www.sakuramc.org/</a>");
+				Logger.log("");
+			}
+			$("#connect").click(function() {
+				if(status == "1") {
+					showmsg("已经连接到服务器了，重新连接请先断开。");
+					return;
+				}
+				hostname = $("#hostname").val();
+				password = $("#password").val();
+				conntype = $("#conntype").val();
+				jstime = parseInt($("#timeout").val());
+				Logger.log("<b>Info: </b>Trying connect to: " + hostname);
+				Logger.log("<b>Info: </b>Request: " + conntype + "://" + hostname + "/?s=shakehand&pass=&lt;hidden&gt;");
+				Logger.log("<b>Info: </b>Set AJAX timeout: " + jstime + "ms");
+				setCookie("hostname", hostname);
+				setCookie("password", password);
+				setCookie("conntype", conntype);
+				htmlobj = $.ajax({url: conntype + "://" + hostname + "/?s=shakehand&pass=" + password, async:true, timeout:5000, success: function() {
+						var data = htmlobj.responseText;
+						if(data.indexOf("/") > -1) {
+							var target = data.split("/");
+							if(target.length > 2) {
+								console.log(target[0]);
+								Logger.log("<b>Info: </b>Remote server Sakura Console daemon version: " + target[2]);
+								if(target[0] == "200") {
+									$("#daemon").html("连接成功");
+									$("#daemon").attr("class", "text-info");
+									$("#systeminfo").fadeIn();
+									status = true;
+									systeminfo();
+									ajaxload();
+								} else if(target[0] == "403") {
+									showmsg("无法建立连接，认证失败");
+									hostname = "";
+									password = "";
+									status = "0";
+									Logger.log("<b>Error: </b>Can't login to server, reason: " + target[1]);
+									Logger.log("<b>Error: </b>Failed connect to server: " + $("#hostname").val());
+								}
+							}
+						}
+						//$("#info").html("成功连接至服务器");
+						
+					}, error: function() {
+						//$("#info").html("无法连接至服务器");
+						showmsg("无法连接至服务器");
+						hostname = "";
+						password = "";
+						status = "0";
+						Logger.log("<b>Error: </b>Failed connect to server: " + $("#hostname").val());
+					}
+				});
+			});
+			function setCookie(name,value) {
+				var Days = 30;
+				var exp = new Date();
+				exp.setTime(exp.getTime() + Days*24*60*60*1000);
+				document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+			}
+			function getCookie(name) {
+				var arr,reg= new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+				if(arr = document.cookie.match(reg)) {
+					return unescape(arr[2]);
+				} else {
+					return null;
+				}
+			}
+			$("#hostname").val(getCookie("hostname"));
+			$("#password").val(getCookie("password"));
+			if(getCookie("conntype") != "") {
+				$("#" + getCookie("conntype")).attr("selected", "selected");
+			}
+			ajaxload();
+			//showmsg("欢迎使用SoraMC", "欢迎使用SoraMC服务器管理系统，由KasuganoSora开发", "favicon.ico");
+		</script>
+	</body>
+
+</html>
